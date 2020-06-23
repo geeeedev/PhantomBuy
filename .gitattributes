@@ -1,0 +1,2 @@
+# Reclassifies `.html` files as Python for this Python Project:
+*.html linguist-language=Python
