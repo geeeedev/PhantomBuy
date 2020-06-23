@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom Buy</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <h4>Welcome, {{currUser.firstnm}}!</h4>
+        </div>
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#AddNewItem" href="/sav/new">Create</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/items">Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+
+        </ul>
+
+        <form action="/sav/bulkUpdate" method="post">
+            {%csrf_token%}
+            <div class="row mt-5">
+                <div class="col-md">
+                    <!-- Pending -->
+                    <h5 class="text-center">Pending</h5>
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in pending %}
+                            <tr>
+                                <th scope="row"></th>
+                                <td>
+                                    <input type="checkbox" class="form-check-input" name="chbxItem"
+                                        value="{{item.id}}">{{item.name}}
+                                </td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.created_at|date:'m/d/Y'}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <td></td>
+                            <td>
+                                <a class="btn btn-outline-info" data-toggle="modal" data-target="#AddNewItem"
+                                    href="/sav/new">Create</a>
+                                <button class="btn btn-outline-info" type="submit" name="btn" 
+                                    value="bulkComplete">Got it!</button>
+                                <button class="btn btn-outline-info" type="submit" name="btn"
+                                    value="bulkSave">Skip</button>
+                                <button class="btn btn-outline-info" type="submit" name="btn"
+                                    value="bulkDelete">Delete</button>
+                            </td>
+                        </tfoot>
+
+                    </table>
+                </div>
+
+                <div class="col-md">
+                    <!-- Completed -->
+                    <h5 class="text-center">Completed</h5>
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in completed %}
+                            <tr>
+                                <th scope="row"></th>
+                                <td>
+                                    <input type="checkbox" class="form-check-input" name="chbxItem"
+                                        value="{{item.id}}">{{item.name}}
+                                </td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.created_at|date:'m/d/Y'}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                        <tfoot>
+                            <td></td>
+                            <td>
+                                <button class="btn btn-outline-info" type="submit" name="btn" value="bulkComplete">Need
+                                    Again</button>
+                                <button class="btn btn-outline-info" type="submit" name="btn"
+                                    value="bulkDelete">Delete</button>
+                            </td>
+                        </tfoot>
+
+                    </table>
+                </div>
+            </div> <!-- row -->
+
+            <div class="row mt-5">
+                <div class="col-md">
+                    <!-- Skipped & Saved -->
+                    {% if skipSaved %}
+                    <h5 class="text-center">Skipped &nbsp; & &nbsp; Saved</h5>
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <!-- <th scope="col">#</th> -->
+                                <th scope="col">Item</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in skipSaved %}
+                            <tr>
+                                <!-- <th scope="row">{{item.id}}</th> -->
+                                <td>{{item.name}}</td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.created_at|date:'m/d/Y'}}</td>
+                                <td>
+                                    {% if item.neededBy.first.id == request.session.currUserID %}
+                                    <a href="/sav/{{item.id}}/edit">Edit</a> |
+                                    <a href="/sav/{{item.id}}/toggleSave">Don't Do It!</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <!-- <td></td> -->
+                            <th scope="row">Total Saving</th>
+                            <td>{{totalSaving.price__sum|floatformat:2}}</td>
+                            <td></td>
+                        </tfoot>
+                    </table>
+                    {% endif %}
+                </div>
+            </div> <!-- row -->
+        </form>
+    </div>
+    <!-- Modal - at bottom closer to /body - make sure this id matches referencing data-target -->
+    <div class="modal fade" id="AddNewItem" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create a New Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form action="/sav/create" method="post">
+                    {%csrf_token%}
+                    <div class="modal-body">
+                        <div class="card-body text-info">
+                            <div class=" form-group col-md-12">
+                                <label>New Item:</label>
+                                <input type="text" autofocus name="name" class="form-control" placeholder="">
+                            </div>
+                            <div class=" form-group col-md-4">
+                                <label>Price:</label>
+                                <input type="number" step="0.01" name="price" class="form-control " placeholder="0.00">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="Submit" class="btn btn-outline-info">Create</button>
+                        <button type="button" class="btn btn-outline-info" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phantom Buy</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <!-- Potential Saving - Registration & Login -->
+    <div class="container pt-5">
+        <h2 class="text-center m-5">Phantom Buy - The Potential Saving App</h2>
+        {% if messages %}
+        <ul class="list-unstyled text-danger">
+            {% for msg in messages %}
+            <li>{{msg}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div class="row">
+            <div class="col">
+                <form action="/register" method="post">
+                    {%csrf_token%}
+                    <div class="card border-info mt-3">
+                        <h5 class="card-header text-info">Registration</h5>
+
+                        <div class="card-body text-info">
+                            <div class="form-group">
+                                <label class="card-title">First Name:</label>
+                                <input type="text" name="firstnm" class="form-control" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="card-title">Last Name:</label>
+                                <input type="text" name="lastnm" class="form-control" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="card-title">Email:</label>
+                                <input type="text" name="email" class="form-control" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="card-title">Password:</label>
+                                <input type="password" name="pswd" class="form-control" value="">
+                            </div>
+                            <div class="form-group">
+                                <label class="card-title">Confirm Password:</label>
+                                <input type="password" name="cfpswd" class="form-control" value="">
+                            </div>
+                        </div>
+
+                        <div class="card-footer text-left">
+                            <button type="submit" class="btn btn-info">Register</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <form action="/login" method="post">
+                    {%csrf_token%}
+                    <div class="card border-info mt-3">
+                        <h5 class="card-header text-info">Log In</h5>
+
+                        <div class="card-body text-info">
+                            <div class="form-group">
+                                <label class="card-title">Email:</label>
+                                <input type="text" name="email" class="form-control" value="g@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="card-title">Password:</label>
+                                <input type="password" name="pswd" class="form-control" value="testingOnly">
+                            </div>
+                        </div>
+
+                        <div class="card-footer text-left">
+                            <button type="submit" class="btn btn-info">Register</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div> <!-- row -->
+    </div>
+</body>
+
+</html>
